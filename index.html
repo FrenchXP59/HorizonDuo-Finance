@@ -3,8 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mes Premiers Investissements</title>
+    <title>HorizonDuo Finance</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="/assets/favicon.png" type="image/png" />
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PV4JRXP2C6"></script>
+    <script>
+      if (!location.hostname.includes("localhost") && !location.hostname.includes("replit.app")) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-PV4JRXP2C6');
+      }
+    </script>
 </head>
 <body class="dark">
     <div class="container">
@@ -12,7 +24,7 @@
         <header class="header">
             <div class="header-content">
                 <div class="logo-section">
-                    <h1 class="logo">💰 Mes Premiers Investissements</h1>
+                    <h1 class="logo">💰 HorizonDuo Finance</h1>
                     <p class="subtitle">3 outils interactifs pour faire ses premiers pas en bourse</p>
                 </div>
                 <button class="theme-toggle" id="themeToggle" aria-label="Basculer le mode sombre/clair">
@@ -71,9 +83,41 @@
             </div>
         </main>
 
+        <!-- Resources Section -->
+        <section class="resources-section">
+            <div class="resources-container">
+                <h2 class="resources-title">Ressources Bourse – Pour aller plus loin</h2>
+                <div class="resources-grid">
+                    <a href="https://www.zonebourse.com" target="_blank" class="resource-card">
+                        <div class="resource-icon">📈</div>
+                        <h3 class="resource-title">Zone Bourse</h3>
+                        <p class="resource-description">Analyse financière et cotations en temps réel</p>
+                    </a>
+                    
+                    <a href="https://fr.finance.yahoo.com" target="_blank" class="resource-card">
+                        <div class="resource-icon">💹</div>
+                        <h3 class="resource-title">Yahoo Finance</h3>
+                        <p class="resource-description">Actualités financières et données de marché</p>
+                    </a>
+                    
+                    <a href="https://horizonduo.net/news/bourse" target="_blank" class="resource-card">
+                        <div class="resource-icon">📰</div>
+                        <h3 class="resource-title">Actualité Bourse</h3>
+                        <p class="resource-description">Actualités boursières par Horizon Duo</p>
+                    </a>
+                    
+                    <a href="https://horizonduo.net/news/actions" target="_blank" class="resource-card">
+                        <div class="resource-icon">🔍</div>
+                        <h3 class="resource-title">Zoom Action</h3>
+                        <p class="resource-description">Analyses détaillées d'actions par Horizon Duo</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+
         <!-- Footer -->
         <footer class="footer">
-            <p>© 2025 Mes Premiers Investissements - Outil éducatif pour débuter en bourse</p>
+            <p>© 2025 HorizonDuo Finance - Outil éducatif pour débuter en bourse</p>
             <p class="disclaimer">
                 ⚠️ Les simulations présentées sont à titre éducatif uniquement et ne constituent pas des conseils financiers.
             </p>
