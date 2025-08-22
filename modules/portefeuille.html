@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulateur de Portefeuille - Mes Premiers Investissements</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="dark">
+    <div class="back-nav">
+        <a href="../index.html" class="back-button" aria-label="Retour à l'accueil">
+            ←
+        </a>
+    </div>
+
+    <div class="calculator-container">
+        <div class="calculator-header">
+            <h1 class="calculator-title">📊 Simulateur de Portefeuille</h1>
+            <p class="calculator-subtitle">
+                Créez votre allocation d'actifs personnalisée grâce à notre questionnaire guidé
+            </p>
+        </div>
+
+        <div id="questionnaire" class="calculator-content">
+            <div class="input-section" style="grid-column: 1 / -1;">
+                <h3>Questionnaire de profil d'investisseur</h3>
+                
+                <div class="form-group">
+                    <label class="form-label">1. Quel est votre horizon de placement ?</label>
+                    <select id="horizon" class="form-select">
+                        <option value="">Sélectionnez votre horizon</option>
+                        <option value="court">Court terme (moins de 3 ans)</option>
+                        <option value="moyen">Moyen terme (3 à 7 ans)</option>
+                        <option value="long">Long terme (plus de 7 ans)</option>
+                    </select>
+                    <small style="color: var(--text-secondary);">Plus l'horizon est long, plus vous pouvez prendre de risques</small>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">2. Quelle est votre tolérance au risque ?</label>
+                    <select id="risk" class="form-select">
+                        <option value="">Sélectionnez votre profil</option>
+                        <option value="faible">Prudent - Je préfère éviter les pertes même modérées</option>
+                        <option value="moderee">Équilibré - J'accepte quelques fluctuations pour un meilleur rendement</option>
+                        <option value="elevee">Dynamique - J'accepte de fortes fluctuations pour maximiser les gains</option>
+                    </select>
+                    <small style="color: var(--text-secondary);">Votre capacité à supporter les variations de votre portefeuille</small>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">3. Quel est votre objectif principal ?</label>
+                    <select id="objective" class="form-select">
+                        <option value="">Sélectionnez votre objectif</option>
+                        <option value="revenus">Générer des revenus réguliers (dividendes, intérêts)</option>
+                        <option value="croissance">Faire croître mon capital sur le long terme</option>
+                        <option value="mixte">Un mix entre revenus et croissance</option>
+                    </select>
+                    <small style="color: var(--text-secondary);">Cela déterminera le type d'actifs privilégiés</small>
+                </div>
+
+                <button class="calculate-button" onclick="generatePortfolio()" id="generateBtn" disabled>
+                    Générer ma proposition de portefeuille
+                </button>
+            </div>
+        </div>
+
+        <div id="results" class="calculator-content" style="display: none;">
+            <div class="result-section">
+                <h3>Votre allocation recommandée</h3>
+                <div id="allocationDetails">
+                    <!-- Les résultats seront insérés ici -->
+                </div>
+
+                <div style="margin-top: 2rem; padding: 1rem; background: var(--bg-primary); border-radius: 0.5rem;">
+                    <h4 style="color: var(--accent-gold); margin-bottom: 0.5rem;">📝 Votre profil</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary);" id="profileSummary">
+                        <!-- Résumé du profil -->
+                    </p>
+                </div>
+
+                <button class="calculate-button" onclick="showSimulation()" style="margin-top: 1rem;">
+                    Voir la simulation à 10 ans
+                </button>
+            </div>
+
+            <div class="chart-container">
+                <h3>Répartition de votre portefeuille</h3>
+                <canvas id="portfolioChart" width="400" height="400"></canvas>
+            </div>
+
+            <div id="simulation" class="chart-container" style="display: none;">
+                <h3>Simulation de performance à 10 ans</h3>
+                <div id="simulationResults" style="margin-bottom: 1rem;">
+                    <!-- Résultats de simulation -->
+                </div>
+                <canvas id="simulationChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="../script.js"></script>
+    <script>
+        let portfolioChart = null;
+        let simulationChart = null;
+
+        // Activer le bouton quand toutes les réponses sont données
+        document.querySelectorAll('#questionnaire select').forEach(select => {
+            select.addEventListener('change', function() {
+                const horizon = document.getElementById('horizon').value;
+                const risk = document.getElementById('risk').value;
+                const objective = document.getElementById('objective').value;
+                
+                const generateBtn = document.getElementById('generateBtn');
+                generateBtn.disabled = !(horizon && risk && objective);
+            });
+        });
+
+        function generatePortfolio() {
+            const horizon = document.getElementById('horizon').value;
+            const risk = document.getElementById('risk').value;
+            const objective = document.getElementById('objective').value;
+
+            const allocation = calculateAllocation(horizon, risk, objective);
+            displayPortfolio(allocation, horizon, risk, objective);
+            
+            document.getElementById('questionnaire').style.display = 'none';
+            document.getElementById('results').style.display = 'grid';
+        }
+
+        function calculateAllocation(horizon, risk, objective) {
+            let allocation = {
+                actions: 0,
+                obligations: 0,
+                cash: 0,
+                immobilier: 0
+            };
+
+            // Base selon l'horizon
+            if (horizon === 'long') {
+                allocation.actions = 70;
+                allocation.obligations = 20;
+                allocation.cash = 5;
+                allocation.immobilier = 5;
+            } else if (horizon === 'moyen') {
+                allocation.actions = 50;
+                allocation.obligations = 35;
+                allocation.cash = 10;
+                allocation.immobilier = 5;
+            } else { // court
+                allocation.actions = 20;
+                allocation.obligations = 50;
+                allocation.cash = 25;
+                allocation.immobilier = 5;
+            }
+
+            // Ajustement selon le risque
+            if (risk === 'elevee') {
+                allocation.actions += 15;
+                allocation.obligations -= 10;
+                allocation.cash -= 5;
+            } else if (risk === 'faible') {
+                allocation.actions -= 15;
+                allocation.obligations += 5;
+                allocation.cash += 10;
+            }
+
+            // Ajustement selon l'objectif
+            if (objective === 'revenus') {
+                allocation.obligations += 10;
+                allocation.immobilier += 5;
+                allocation.actions -= 15;
+            } else if (objective === 'croissance') {
+                allocation.actions += 10;
+                allocation.obligations -= 5;
+                allocation.cash -= 5;
+            }
+
+            // S'assurer que les totaux sont corrects
+            const total = allocation.actions + allocation.obligations + allocation.cash + allocation.immobilier;
+            if (total !== 100) {
+                const diff = 100 - total;
+                allocation.actions += diff;
+            }
+
+            // S'assurer que les valeurs sont positives
+            Object.keys(allocation).forEach(key => {
+                allocation[key] = Math.max(0, allocation[key]);
+            });
+
+            return allocation;
+        }
+
+        function displayPortfolio(allocation, horizon, risk, objective) {
+            // Afficher les détails de l'allocation
+            const details = document.getElementById('allocationDetails');
+            details.innerHTML = `
+                <div class="result-item">
+                    <span class="result-label">🏢 Actions (ETF Monde) :</span>
+                    <span class="result-value">${allocation.actions}%</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">🏛️ Obligations :</span>
+                    <span class="result-value">${allocation.obligations}%</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">💰 Liquidités :</span>
+                    <span class="result-value">${allocation.cash}%</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">🏠 Immobilier (REIT) :</span>
+                    <span class="result-value">${allocation.immobilier}%</span>
+                </div>
+            `;
+
+            // Résumé du profil
+            const profileTexts = {
+                horizon: {
+                    court: "horizon court terme",
+                    moyen: "horizon moyen terme", 
+                    long: "horizon long terme"
+                },
+                risk: {
+                    faible: "profil prudent",
+                    moderee: "profil équilibré",
+                    elevee: "profil dynamique"
+                },
+                objective: {
+                    revenus: "objectif de revenus",
+                    croissance: "objectif de croissance",
+                    mixte: "objectif mixte"
+                }
+            };
+
+            document.getElementById('profileSummary').textContent = 
+                `Votre profil : ${profileTexts.horizon[horizon]}, ${profileTexts.risk[risk]}, ${profileTexts.objective[objective]}. Cette allocation est adaptée à vos réponses et vous permet d'optimiser le couple rendement/risque selon vos préférences.`;
+
+            // Créer le graphique en camembert
+            createPortfolioChart(allocation);
+        }
+
+        function createPortfolioChart(allocation) {
+            const ctx = document.getElementById('portfolioChart').getContext('2d');
+
+            if (portfolioChart) {
+                portfolioChart.destroy();
+            }
+
+            const isDark = document.body.classList.contains('dark');
+
+            portfolioChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Actions', 'Obligations', 'Liquidités', 'Immobilier'],
+                    datasets: [{
+                        data: [allocation.actions, allocation.obligations, allocation.cash, allocation.immobilier],
+                        backgroundColor: [
+                            '#FFD700',
+                            '#10B981',
+                            '#3B82F6',
+                            '#F59E0B'
+                        ],
+                        borderColor: isDark ? '#111827' : '#ffffff',
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: isDark ? '#fefefe' : '#111827',
+                                padding: 20,
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.parsed + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function showSimulation() {
+            const allocation = {
+                actions: portfolioChart.data.datasets[0].data[0],
+                obligations: portfolioChart.data.datasets[0].data[1],
+                cash: portfolioChart.data.datasets[0].data[2],
+                immobilier: portfolioChart.data.datasets[0].data[3]
+            };
+
+            const simulationData = simulatePortfolioGrowth(allocation, 10000, 10);
+            
+            document.getElementById('simulation').style.display = 'block';
+            
+            // Afficher les résultats de simulation
+            const finalValue = simulationData[simulationData.length - 1];
+            const totalReturn = ((finalValue.total / 10000) - 1) * 100;
+            
+            document.getElementById('simulationResults').innerHTML = `
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div class="result-item">
+                        <span class="result-label">Investissement initial :</span>
+                        <span class="result-value">${formatCurrency(10000)}</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Valeur après 10 ans :</span>
+                        <span class="result-value">${formatCurrency(finalValue.total)}</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Rendement total :</span>
+                        <span class="result-value" style="color: ${totalReturn > 0 ? '#10B981' : '#EF4444'}">${totalReturn.toFixed(1)}%</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Rendement annualisé :</span>
+                        <span class="result-value">${(totalReturn / 10).toFixed(1)}% / an</span>
+                    </div>
+                </div>
+            `;
+
+            createSimulationChart(simulationData);
+        }
+
+        function simulatePortfolioGrowth(allocation, initialAmount, years) {
+            // Rendements annuels moyens historiques
+            const returns = {
+                actions: 0.07,      // 7% pour les actions
+                obligations: 0.03,   // 3% pour les obligations
+                cash: 0.01,         // 1% pour les liquidités
+                immobilier: 0.05    // 5% pour l'immobilier
+            };
+
+            const yearlyData = [];
+            let currentValue = initialAmount;
+
+            for (let year = 0; year <= years; year++) {
+                if (year > 0) {
+            // Appliquer les rendements pondérés
+            const portfolioReturn = 
+                (allocation.actions / 100 * returns.actions) +
+                (allocation.obligations / 100 * returns.obligations) +
+                (allocation.cash / 100 * returns.cash) +
+                (allocation.immobilier / 100 * returns.immobilier);
+
+            // Ajouter de la volatilité (simulation simple)
+            const volatility = (Math.random() - 0.5) * 0.2; // ±10% de volatilité
+            const finalReturn = portfolioReturn + volatility;
+            
+            currentValue *= (1 + finalReturn);
+        }
+
+        yearlyData.push({
+            year: year,
+            total: currentValue,
+            actions: currentValue * allocation.actions / 100,
+            obligations: currentValue * allocation.obligations / 100,
+            cash: currentValue * allocation.cash / 100,
+            immobilier: currentValue * allocation.immobilier / 100
+        });
+    }
+
+    return yearlyData;
+}
+
+function createSimulationChart(data) {
+    const ctx = document.getElementById('simulationChart').getContext('2d');
+
+    if (simulationChart) {
+        simulationChart.destroy();
+    }
+
+    const isDark = document.body.classList.contains('dark');
+
+    simulationChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: data.map(d => `Année ${d.year}`),
+            datasets: [{
+                label: 'Valeur du portefeuille',
+                data: data.map(d => d.total),
+                borderColor: '#FFD700',
+                backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                fill: true,
+                tension: 0.4,
+                borderWidth: 3
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: isDark ? '#fefefe' : '#111827'
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return 'Valeur : ' + formatCurrency(context.parsed.y);
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        color: isDark ? '#d1d5db' : '#6b7280'
+                    },
+                    grid: {
+                        color: isDark ? '#374151' : '#e5e7eb'
+                    }
+                },
+                y: {
+                    ticks: {
+                        color: isDark ? '#d1d5db' : '#6b7280',
+                        callback: function(value) {
+                            return formatCurrency(value);
+                        }
+                    },
+                    grid: {
+                        color: isDark ? '#374151' : '#e5e7eb'
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Gestion du thème pour les graphiques
+document.addEventListener('DOMContentLoaded', function() {
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                if (portfolioChart) {
+                    const isDark = document.body.classList.contains('dark');
+                    portfolioChart.options.plugins.legend.labels.color = isDark ? '#fefefe' : '#111827';
+                    portfolioChart.data.datasets[0].borderColor = isDark ? '#111827' : '#ffffff';
+                    portfolioChart.update();
+                }
+                if (simulationChart) {
+                    const isDark = document.body.classList.contains('dark');
+                    simulationChart.options.plugins.legend.labels.color = isDark ? '#fefefe' : '#111827';
+                    simulationChart.options.scales.x.ticks.color = isDark ? '#d1d5db' : '#6b7280';
+                    simulationChart.options.scales.y.ticks.color = isDark ? '#d1d5db' : '#6b7280';
+                    simulationChart.options.scales.x.grid.color = isDark ? '#374151' : '#e5e7eb';
+                    simulationChart.options.scales.y.grid.color = isDark ? '#374151' : '#e5e7eb';
+                    simulationChart.update();
+                }
+            }
+        });
+    });
+
+    observer.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class']
+    });
+});
+    </script>
+</body>
+</html>

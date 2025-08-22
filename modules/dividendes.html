@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulateur de Dividendes - Mes Premiers Investissements</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="dark">
+    <div class="back-nav">
+        <a href="../index.html" class="back-button" aria-label="Retour à l'accueil">
+            ←
+        </a>
+    </div>
+
+    <div class="calculator-container">
+        <div class="calculator-header">
+            <h1 class="calculator-title">💰 Simulateur de Dividendes</h1>
+            <p class="calculator-subtitle">
+                Découvrez le potentiel des revenus passifs grâce aux dividendes et au réinvestissement
+            </p>
+        </div>
+
+        <div class="calculator-content">
+            <div class="input-section">
+                <h3>Paramètres de simulation</h3>
+                
+                <div class="form-group">
+                    <label for="investment" class="form-label">Montant investi (€)</label>
+                    <input type="number" id="investment" class="form-input" value="20000" min="1000" step="1000">
+                    <small style="color: var(--text-secondary);">Capital initial investi dans des actions à dividendes</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="dividendYield" class="form-label">Rendement en dividendes (%)</label>
+                    <input type="range" id="yieldSlider" class="form-input" min="1" max="8" step="0.1" value="4">
+                    <input type="number" id="dividendYield" class="form-input" value="4" min="0" max="15" step="0.1" style="margin-top: 0.5rem;">
+                    <small style="color: var(--text-secondary);">Rendement annuel en dividendes (4% est une bonne moyenne)</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="growthRate" class="form-label">Croissance annuelle du dividende (%)</label>
+                    <input type="number" id="growthRate" class="form-input" value="3" min="0" max="10" step="0.5">
+                    <small style="color: var(--text-secondary);">Augmentation moyenne annuelle du dividende par action</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="duration" class="form-label">Durée de simulation (années)</label>
+                    <input type="number" id="duration" class="form-input" value="15" min="1" max="30">
+                    <small style="color: var(--text-secondary);">Période sur laquelle simuler les dividendes</small>
+                </div>
+
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                        <input type="checkbox" id="reinvest" checked style="width: auto;">
+                        <span class="form-label" style="margin: 0;">Réinvestissement automatique des dividendes</span>
+                    </label>
+                    <small style="color: var(--text-secondary);">Racheter automatiquement des actions avec les dividendes reçus</small>
+                </div>
+
+                <button class="calculate-button" onclick="calculateDividendsAndDisplay()">
+                    Simuler mes dividendes
+                </button>
+            </div>
+
+            <div class="result-section">
+                <h3>Résultats de la simulation</h3>
+                <div id="results">
+                    <div class="result-item">
+                        <span class="result-label">Total des dividendes :</span>
+                        <span class="result-value" id="totalDividends">-</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Valeur du portefeuille :</span>
+                        <span class="result-value" id="portfolioValue">-</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Nombre d'actions :</span>
+                        <span class="result-value" id="totalShares">-</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Rendement total :</span>
+                        <span class="result-value" id="totalReturn">-</span>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem; padding: 1rem; background: var(--bg-primary); border-radius: 0.5rem;">
+                    <h4 style="color: var(--accent-gold); margin-bottom: 0.5rem;">💡 Astuce</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary);" id="dividendTip">
+                        Le réinvestissement des dividendes est une stratégie puissante pour faire croître votre patrimoine !
+                    </p>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3>Comparaison : Avec vs Sans réinvestissement</h3>
+                <canvas id="dividendChart" width="400" height="200"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h3>Tableau détaillé année par année</h3>
+                <div id="yearlyTable" style="overflow-x: auto;">
+                    <!-- Tableau sera inséré ici -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../script.js"></script>
+    <script>
+        let chart = null;
+
+        // Synchroniser les champs de rendement
+        document.getElementById('yieldSlider').addEventListener('input', function() {
+            document.getElementById('dividendYield').value = this.value;
+        });
+
+        document.getElementById('dividendYield').addEventListener('input', function() {
+            document.getElementById('yieldSlider').value = this.value;
+        });
+
+        // Calcul automatique lors des changements
+        document.querySelectorAll('.form-input, #reinvest').forEach(input => {
+            input.addEventListener('input', calculateDividendsAndDisplay);
+            input.addEventListener('change', calculateDividendsAndDisplay);
+        });
+
+        function calculateDividendsAndDisplay() {
+            const investment = parseFloat(document.getElementById('investment').value) || 0;
+            const dividendYield = parseFloat(document.getElementById('dividendYield').value) || 0;
+            const growthRate = parseFloat(document.getElementById('growthRate').value) || 0;
+            const duration = parseInt(document.getElementById('duration').value) || 0;
+            const reinvest = document.getElementById('reinvest').checked;
+
+            if (investment <= 0 || duration <= 0) return;
+
+            // Calculer avec et sans réinvestissement
+            const withReinvest = calculateDividends(investment, dividendYield, growthRate, duration, true);
+            const withoutReinvest = calculateDividends(investment, dividendYield, growthRate, duration, false);
+            
+            const currentData = reinvest ? withReinvest : withoutReinvest;
+            const finalData = currentData[currentData.length - 1];
+
+            // Afficher les résultats
+            document.getElementById('totalDividends').textContent = formatCurrency(finalData.totalDividends);
+            document.getElementById('portfolioValue').textContent = formatCurrency(finalData.portfolioValue);
+            document.getElementById('totalShares').textContent = Math.round(finalData.shares).toLocaleString('fr-FR');
+            
+            const totalReturn = ((finalData.portfolioValue + finalData.totalDividends) / investment - 1) * 100;
+            document.getElementById('totalReturn').textContent = `+${totalReturn.toFixed(1)}%`;
+
+            // Conseil personnalisé
+            updateDividendTip(withReinvest, withoutReinvest, duration, reinvest);
+
+            // Mettre à jour le graphique
+            updateDividendChart(withReinvest, withoutReinvest);
+
+            // Mettre à jour le tableau
+            updateYearlyTable(currentData);
+        }
+
+        function updateDividendTip(withReinvest, withoutReinvest, duration, isReinvesting) {
+            const finalWith = withReinvest[withReinvest.length - 1];
+            const finalWithout = withoutReinvest[withoutReinvest.length - 1];
+            
+            const differenceTotal = (finalWith.portfolioValue + finalWith.totalDividends) - 
+                                  (finalWithout.portfolioValue + finalWithout.totalDividends);
+            
+            let tip = "";
+            
+            if (isReinvesting) {
+                tip = `Excellent choix ! Le réinvestissement vous fait gagner ${formatCurrency(differenceTotal)} de plus sur ${duration} ans par rapport à une stratégie sans réinvestissement.`;
+            } else {
+                tip = `En réinvestissant vos dividendes, vous pourriez gagner ${formatCurrency(differenceTotal)} de plus sur ${duration} ans. C'est le pouvoir de la capitalisation !`;
+            }
+
+            document.getElementById('dividendTip').textContent = tip;
+        }
+
+        function updateDividendChart(withReinvest, withoutReinvest) {
+            const ctx = document.getElementById('dividendChart').getContext('2d');
+
+            if (chart) {
+                chart.destroy();
+            }
+
+            const isDark = document.body.classList.contains('dark');
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: withReinvest.map(d => `Année ${d.year}`),
+                    datasets: [
+                        {
+                            label: 'Avec réinvestissement (total)',
+                            data: withReinvest.map(d => d.portfolioValue + d.totalDividends),
+                            borderColor: '#FFD700',
+                            backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                            fill: false,
+                            tension: 0.4,
+                            borderWidth: 3
+                        },
+                        {
+                            label: 'Sans réinvestissement (total)',
+                            data: withoutReinvest.map(d => d.portfolioValue + d.totalDividends),
+                            borderColor: '#10B981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            fill: false,
+                            tension: 0.4,
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Dividendes cumulés (avec réinvest.)',
+                            data: withReinvest.map(d => d.totalDividends),
+                            borderColor: '#3B82F6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            fill: false,
+                            tension: 0.4,
+                            borderWidth: 2,
+                            borderDash: [5, 5]
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: isDark ? '#fefefe' : '#111827'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + formatCurrency(context.parsed.y);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: isDark ? '#d1d5db' : '#6b7280'
+                            },
+                            grid: {
+                                color: isDark ? '#374151' : '#e5e7eb'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: isDark ? '#d1d5db' : '#6b7280',
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                }
+                            },
+                            grid: {
+                                color: isDark ? '#374151' : '#e5e7eb'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateYearlyTable(data) {
+            const tableContainer = document.getElementById('yearlyTable');
+            
+            let tableHTML = `
+                <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                    <thead>
+                        <tr style="background: var(--bg-primary); border-bottom: 2px solid var(--border-color);">
+                            <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Année</th>
+                            <th style="padding: 0.75rem; text-align: right; color: var(--text-primary);">Actions</th>
+                            <th style="padding: 0.75rem; text-align: right; color: var(--text-primary);">Dividende/Action</th>
+                            <th style="padding: 0.75rem; text-align: right; color: var(--text-primary);">Dividendes reçus</th>
+                            <th style="padding: 0.75rem; text-align: right; color: var(--text-primary);">Total dividendes</th>
+                            <th style="padding: 0.75rem; text-align: right; color: var(--text-primary);">Valeur portefeuille</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            data.forEach((row, index) => {
+                if (index === 0) return; // Skip year 0
+                
+                const rowStyle = index % 2 === 0 ? 'background: var(--bg-primary);' : 'background: var(--bg-secondary);';
+                
+                tableHTML += `
+                    <tr style="${rowStyle}">
+                        <td style="padding: 0.5rem; border-bottom: 1px solid var(--border-color);">${row.year}</td>
+                        <td style="padding: 0.5rem; text-align: right; border-bottom: 1px solid var(--border-color);">${Math.round(row.shares).toLocaleString('fr-FR')}</td>
+                        <td style="padding: 0.5rem; text-align: right; border-bottom: 1px solid var(--border-color);">${row.dividendPerShare.toFixed(2)}€</td>
+                        <td style="padding: 0.5rem; text-align: right; border-bottom: 1px solid var(--border-color); color: var(--green-curve);">${formatCurrency(row.dividendReceived)}</td>
+                        <td style="padding: 0.5rem; text-align: right; border-bottom: 1px solid var(--border-color); font-weight: 600;">${formatCurrency(row.totalDividends)}</td>
+                        <td style="padding: 0.5rem; text-align: right; border-bottom: 1px solid var(--border-color); color: var(--accent-gold); font-weight: 600;">${formatCurrency(row.portfolioValue)}</td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+
+            tableContainer.innerHTML = tableHTML;
+        }
+
+        // Calcul initial
+        calculateDividendsAndDisplay();
+
+        // Gestion du thème pour le graphique
+        document.addEventListener('DOMContentLoaded', function() {
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                        if (chart) {
+                            calculateDividendsAndDisplay(); // Recréer le graphique avec les nouvelles couleurs
+                        }
+                    }
+                });
+            });
+
+            observer.observe(document.body, {
+                attributes: true,
+                attributeFilter: ['class']
+            });
+        });
+    </script>
+</body>
+</html>

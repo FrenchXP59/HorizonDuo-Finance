@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Premiers Investissements</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark">
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <h1 class="logo">💰 Mes Premiers Investissements</h1>
+                    <p class="subtitle">3 outils interactifs pour faire ses premiers pas en bourse</p>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Basculer le mode sombre/clair">
+                    <span class="theme-icon">🌙</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="tools-grid">
+                <!-- Calculatrice d'intérêts composés -->
+                <div class="tool-card" onclick="navigateToTool('modules/interets.html')">
+                    <div class="tool-icon">🔢</div>
+                    <h3 class="tool-title">Intérêts Composés</h3>
+                    <p class="tool-description">
+                        Découvrez la puissance des intérêts composés et simulez la croissance de votre capital sur le long terme.
+                    </p>
+                    <div class="tool-features">
+                        <span class="feature">📈 Simulation graphique</span>
+                        <span class="feature">💰 Épargne mensuelle</span>
+                        <span class="feature">⏱️ Projection temporelle</span>
+                    </div>
+                    <button class="tool-button">Calculer mes intérêts</button>
+                </div>
+
+                <!-- Simulateur de portefeuille -->
+                <div class="tool-card" onclick="navigateToTool('modules/portefeuille.html')">
+                    <div class="tool-icon">📊</div>
+                    <h3 class="tool-title">Mon Portefeuille</h3>
+                    <p class="tool-description">
+                        Créez votre allocation d'actifs personnalisée grâce à un questionnaire adapté aux débutants.
+                    </p>
+                    <div class="tool-features">
+                        <span class="feature">📋 Questionnaire guidé</span>
+                        <span class="feature">🥧 Répartition visuelle</span>
+                        <span class="feature">🎯 Suggestions personnalisées</span>
+                    </div>
+                    <button class="tool-button">Composer mon portefeuille</button>
+                </div>
+
+                <!-- Simulateur de dividendes -->
+                <div class="tool-card" onclick="navigateToTool('modules/dividendes.html')">
+                    <div class="tool-icon">💰</div>
+                    <h3 class="tool-title">Dividendes</h3>
+                    <p class="tool-description">
+                        Simulez vos revenus passifs grâce aux dividendes et comparez les stratégies de réinvestissement.
+                    </p>
+                    <div class="tool-features">
+                        <span class="feature">💸 Revenus passifs</span>
+                        <span class="feature">🔄 Réinvestissement automatique</span>
+                        <span class="feature">📊 Comparaison de stratégies</span>
+                    </div>
+                    <button class="tool-button">Calculer mes dividendes</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>© 2025 Mes Premiers Investissements - Outil éducatif pour débuter en bourse</p>
+            <p class="disclaimer">
+                ⚠️ Les simulations présentées sont à titre éducatif uniquement et ne constituent pas des conseils financiers.
+            </p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

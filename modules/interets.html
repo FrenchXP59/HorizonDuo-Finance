@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculatrice d'Intérêts Composés - Mes Premiers Investissements</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="dark">
+    <div class="back-nav">
+        <a href="../index.html" class="back-button" aria-label="Retour à l'accueil">
+            ←
+        </a>
+    </div>
+
+    <div class="calculator-container">
+        <div class="calculator-header">
+            <h1 class="calculator-title">🔢 Calculatrice d'Intérêts Composés</h1>
+            <p class="calculator-subtitle">
+                Découvrez comment votre argent peut croître grâce au pouvoir des intérêts composés
+            </p>
+        </div>
+
+        <div class="calculator-content">
+            <div class="input-section">
+                <h3>Paramètres de simulation</h3>
+                
+                <div class="form-group">
+                    <label for="principal" class="form-label">Montant initial (€)</label>
+                    <input type="number" id="principal" class="form-input" value="10000" min="100" step="100">
+                    <small style="color: var(--text-secondary);">Le capital de départ que vous souhaitez investir</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="rate" class="form-label">Taux de rendement annuel (%)</label>
+                    <input type="range" id="rateSlider" class="form-input" min="1" max="15" step="0.1" value="7">
+                    <input type="number" id="rate" class="form-input" value="7" min="0" max="30" step="0.1" style="margin-top: 0.5rem;">
+                    <small style="color: var(--text-secondary);">Rendement annuel moyen attendu (historiquement 7% pour les marchés actions)</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="years" class="form-label">Durée d'investissement (années)</label>
+                    <input type="number" id="years" class="form-input" value="20" min="1" max="50">
+                    <small style="color: var(--text-secondary);">Plus la durée est longue, plus l'effet de capitalisation est puissant</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="monthly" class="form-label">Épargne mensuelle (€) - Optionnel</label>
+                    <input type="number" id="monthly" class="form-input" value="300" min="0" step="50">
+                    <small style="color: var(--text-secondary);">Montant que vous ajoutez chaque mois à votre investissement</small>
+                </div>
+
+                <button class="calculate-button" onclick="calculateAndDisplay()">
+                    Calculer ma projection
+                </button>
+            </div>
+
+            <div class="result-section">
+                <h3>Résultats de la simulation</h3>
+                <div id="results">
+                    <div class="result-item">
+                        <span class="result-label">Capital final :</span>
+                        <span class="result-value" id="finalAmount">-</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Total versé :</span>
+                        <span class="result-value" id="totalContributions">-</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Intérêts générés :</span>
+                        <span class="result-value" id="totalInterest">-</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Multiplication du capital :</span>
+                        <span class="result-value" id="multiplier">-</span>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem; padding: 1rem; background: var(--bg-primary); border-radius: 0.5rem;">
+                    <h4 style="color: var(--accent-gold); margin-bottom: 0.5rem;">💡 Le saviez-vous ?</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary);" id="educationalTip">
+                        Les intérêts composés sont considérés comme la 8ème merveille du monde par Albert Einstein !
+                    </p>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3>Évolution de votre capital</h3>
+                <canvas id="compoundChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="../script.js"></script>
+    <script>
+        let chart = null;
+
+        // Synchroniser les champs de taux
+        document.getElementById('rateSlider').addEventListener('input', function() {
+            document.getElementById('rate').value = this.value;
+        });
+
+        document.getElementById('rate').addEventListener('input', function() {
+            document.getElementById('rateSlider').value = this.value;
+        });
+
+        // Calcul et affichage automatique
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('input', calculateAndDisplay);
+        });
+
+        function calculateAndDisplay() {
+            const principal = parseFloat(document.getElementById('principal').value) || 0;
+            const rate = parseFloat(document.getElementById('rate').value) || 0;
+            const years = parseInt(document.getElementById('years').value) || 0;
+            const monthly = parseFloat(document.getElementById('monthly').value) || 0;
+
+            if (principal <= 0 || years <= 0) return;
+
+            const data = calculateCompoundInterest(principal, rate, years, monthly);
+            const finalData = data[data.length - 1];
+
+            // Afficher les résultats
+            document.getElementById('finalAmount').textContent = formatCurrency(finalData.amount);
+            document.getElementById('totalContributions').textContent = formatCurrency(finalData.contributions);
+            document.getElementById('totalInterest').textContent = formatCurrency(finalData.interest);
+            document.getElementById('multiplier').textContent = `×${(finalData.amount / finalData.contributions).toFixed(1)}`;
+
+            // Conseil éducatif personnalisé
+            updateEducationalTip(finalData.interest, finalData.contributions, years);
+
+            // Mettre à jour le graphique
+            updateChart(data);
+        }
+
+        function updateEducationalTip(interest, contributions, years) {
+            const interestPercentage = (interest / contributions) * 100;
+            let tip = "";
+
+            if (years >= 20) {
+                tip = `Sur ${years} ans, les intérêts représentent ${interestPercentage.toFixed(0)}% de vos gains ! C'est le pouvoir du temps qui travaille pour vous.`;
+            } else if (interestPercentage > 50) {
+                tip = `Vos intérêts génèrent plus que vos versements ! C'est l'effet boule de neige des intérêts composés.`;
+            } else {
+                tip = `Avec ${years} ans d'investissement, vous pourriez prolonger la durée pour maximiser l'effet des intérêts composés.`;
+            }
+
+            document.getElementById('educationalTip').textContent = tip;
+        }
+
+        function updateChart(data) {
+            const ctx = document.getElementById('compoundChart').getContext('2d');
+
+            if (chart) {
+                chart.destroy();
+            }
+
+            const isDark = document.body.classList.contains('dark');
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.map(d => `Année ${d.year}`),
+                    datasets: [
+                        {
+                            label: 'Capital total',
+                            data: data.map(d => d.amount),
+                            borderColor: '#FFD700',
+                            backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            borderWidth: 3
+                        },
+                        {
+                            label: 'Contributions cumulées',
+                            data: data.map(d => d.contributions),
+                            borderColor: '#10B981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: isDark ? '#fefefe' : '#111827'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + formatCurrency(context.parsed.y);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: isDark ? '#d1d5db' : '#6b7280'
+                            },
+                            grid: {
+                                color: isDark ? '#374151' : '#e5e7eb'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: isDark ? '#d1d5db' : '#6b7280',
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                }
+                            },
+                            grid: {
+                                color: isDark ? '#374151' : '#e5e7eb'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Calcul initial
+        calculateAndDisplay();
+
+        // Gestion du thème pour le graphique
+        document.addEventListener('DOMContentLoaded', function() {
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                        if (chart) {
+                            calculateAndDisplay(); // Recréer le graphique avec les nouvelles couleurs
+                        }
+                    }
+                });
+            });
+
+            observer.observe(document.body, {
+                attributes: true,
+                attributeFilter: ['class']
+            });
+        });
+    </script>
+</body>
+</html>
