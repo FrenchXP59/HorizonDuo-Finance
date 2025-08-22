@@ -1,0 +1,102 @@
+_app-dc45261c6c86c5c5.js:16 
+      /////////////////////
+   ///////////////////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////        Curious and driven?
+  ///////////////@@@@@@@///////        Work with us!
+  ///////////////@@@@@@@///////
+  ///////////////@@@@@@@///////        https://join.replit.com/hack.with.us
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@#//////////////
+   ///////////////////////////
+      /////////////////////
+      
+js?id=AW-11411994397:128 The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+Nc @ js?id=AW-11411994397:128
+js?id=AW-11411994397:128 The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+Nc @ js?id=AW-11411994397:128
+js?id=AW-11411994397:128 The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+Nc @ js?id=AW-11411994397:128
+js?id=AW-11411994397:128 The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+Nc @ js?id=AW-11411994397:128
+js?id=AW-11411994397:128 The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+Nc @ js?id=AW-11411994397:128
+js?id=AW-11411994397:128 The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+Nc @ js?id=AW-11411994397:128
+js?id=AW-11411994397:515 The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+q @ js?id=AW-11411994397:515
+js?id=AW-11411994397:515 The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+q @ js?id=AW-11411994397:515
+js?id=AW-11411994397:515 The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+q @ js?id=AW-11411994397:515
+stripe.js:1 The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+value @ stripe.js:1
+stripe.js:1 The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+value @ stripe.js:1
+stripe.js:1 The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+value @ stripe.js:1
+_app-dc45261c6c86c5c5.js:16 [LaunchDarkly] LaunchDarkly client initialized
+recaptcha__fr.js:645 The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+W @ recaptcha__fr.js:645
+recaptcha__fr.js:645 The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+W @ recaptcha__fr.js:645
+recaptcha__fr.js:645 The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+W @ recaptcha__fr.js:645
+recaptcha__fr.js:435 The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+(anonymous) @ recaptcha__fr.js:435
+recaptcha__fr.js:435 The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+(anonymous) @ recaptcha__fr.js:435
+recaptcha__fr.js:435 The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+(anonymous) @ recaptcha__fr.js:435
+recaptcha__fr.js:435 The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+(anonymous) @ recaptcha__fr.js:435
+recaptcha__fr.js:435 The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+(anonymous) @ recaptcha__fr.js:435
+recaptcha__fr.js:435 The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+(anonymous) @ recaptcha__fr.js:435
+framework-ccfe1a689624b6d6.js:1 Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+_ @ framework-ccfe1a689624b6d6.js:1
+framework-ccfe1a689624b6d6.js:1 Unrecognized feature: 'ambient-light-sensor'.
+_ @ framework-ccfe1a689624b6d6.js:1
+framework-ccfe1a689624b6d6.js:1 Unrecognized feature: 'battery'.
+_ @ framework-ccfe1a689624b6d6.js:1
+framework-ccfe1a689624b6d6.js:1 Unrecognized feature: 'execution-while-not-rendered'.
+_ @ framework-ccfe1a689624b6d6.js:1
+framework-ccfe1a689624b6d6.js:1 Unrecognized feature: 'execution-while-out-of-viewport'.
+_ @ framework-ccfe1a689624b6d6.js:1
+framework-ccfe1a689624b6d6.js:1 Unrecognized feature: 'layout-animations'.
+_ @ framework-ccfe1a689624b6d6.js:1
+framework-ccfe1a689624b6d6.js:1 Unrecognized feature: 'legacy-image-formats'.
+_ @ framework-ccfe1a689624b6d6.js:1
+framework-ccfe1a689624b6d6.js:1 Unrecognized feature: 'navigation-override'.
+_ @ framework-ccfe1a689624b6d6.js:1
+framework-ccfe1a689624b6d6.js:1 Unrecognized feature: 'oversized-images'.
+_ @ framework-ccfe1a689624b6d6.js:1
+framework-ccfe1a689624b6d6.js:1 Unrecognized feature: 'publickey-credentials'.
+_ @ framework-ccfe1a689624b6d6.js:1
+framework-ccfe1a689624b6d6.js:1 Unrecognized feature: 'speaker-selection'.
+_ @ framework-ccfe1a689624b6d6.js:1
+framework-ccfe1a689624b6d6.js:1 Unrecognized feature: 'unoptimized-images'.
+_ @ framework-ccfe1a689624b6d6.js:1
+framework-ccfe1a689624b6d6.js:1 Unrecognized feature: 'unsized-media'.
+_ @ framework-ccfe1a689624b6d6.js:1
+framework-ccfe1a689624b6d6.js:1 Unrecognized feature: 'pointer-lock'.
+_ @ framework-ccfe1a689624b6d6.js:1
+framework-ccfe1a689624b6d6.js:1 Allow attribute will take precedence over 'allowfullscreen'.
+_ @ framework-ccfe1a689624b6d6.js:1
+framework-ccfe1a689624b6d6.js:1 Allow attribute will take precedence over 'allowpaymentrequest'.
+_ @ framework-ccfe1a689624b6d6.js:1
+framework-ccfe1a689624b6d6.js:1 The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+e @ framework-ccfe1a689624b6d6.js:1
+framework-ccfe1a689624b6d6.js:1 The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+e @ framework-ccfe1a689624b6d6.js:1
+framework-ccfe1a689624b6d6.js:1 The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+e @ framework-ccfe1a689624b6d6.js:1
+stripe.js:1 The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+value @ stripe.js:1
+stripe.js:1 The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+value @ stripe.js:1
+stripe.js:1 The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+value @ stripe.js:1
