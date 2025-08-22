@@ -348,6 +348,12 @@ body {
         margin-bottom: 0.75rem;
     }
 
+    .resource-icon-img {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 0.75rem;
+    }
+
     .tool-title, .resource-title {
         font-size: 1.3rem;
         margin-bottom: 0.75rem;
@@ -599,6 +605,20 @@ body {
     font-size: 2.5rem;
     margin-bottom: 1rem;
     display: block;
+}
+
+.resource-icon-img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+    display: block;
+    margin: 0 auto 1rem auto;
+}
+
+.resource-icon-img:hover {
+    transform: scale(1.1);
 }
 
 .resource-title {
