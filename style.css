@@ -41,6 +41,9 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
 }
 
 /* Header */
@@ -56,6 +59,7 @@ body {
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
+    width: 100%;
 }
 
 .logo-section {
@@ -263,38 +267,50 @@ body {
         flex-direction: column;
         text-align: center;
         gap: 1.5rem;
+        max-width: none;
+        width: 100%;
     }
 
     .header-actions {
         justify-content: center;
+        width: 100%;
     }
 
     .tools-grid {
         grid-template-columns: 1fr;
         gap: 1.5rem;
+        width: 100%;
+        max-width: none;
     }
 
     .main-content {
         padding: 2rem 1rem;
+        width: 100%;
+        max-width: none;
     }
 
     .tool-card {
         padding: 1.5rem;
+        width: 100%;
+        max-width: none;
     }
 
     .resources-grid {
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        grid-template-columns: 1fr;
         gap: 1.5rem;
+        width: 100%;
     }
 
     .resources-section {
         padding: 3rem 1rem;
+        width: 100%;
     }
 
     .tool-features {
         flex-direction: row;
         flex-wrap: wrap;
         gap: 0.5rem;
+        justify-content: center;
     }
 
     .feature {
@@ -331,71 +347,96 @@ body {
 }
 
 @media (max-width: 480px) {
+    body {
+        font-size: 14px;
+    }
+
     .header {
-        padding: 1.25rem 1rem;
+        padding: 1rem 0.75rem;
     }
 
     .main-content {
-        padding: 1.5rem 1rem;
+        padding: 1.25rem 0.75rem;
     }
 
     .tool-card, .resource-card {
         padding: 1rem;
+        margin: 0;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .tool-icon, .resource-icon {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
         margin-bottom: 0.75rem;
     }
 
     .resource-icon-img {
-        width: 50px;
-        height: 50px;
+        width: 48px;
+        height: 48px;
         margin-bottom: 0.75rem;
     }
 
     .tool-title, .resource-title {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
         margin-bottom: 0.75rem;
+        line-height: 1.3;
     }
 
     .tool-description, .resource-description {
         font-size: 0.9rem;
         margin-bottom: 1rem;
+        line-height: 1.4;
     }
 
     .tool-features {
         margin-bottom: 1.5rem;
-        gap: 0.4rem;
+        gap: 0.3rem;
+        justify-content: center;
     }
 
     .feature {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
     }
 
     .tool-button {
-        padding: 0.625rem 1.25rem;
+        padding: 0.75rem 1rem;
         font-size: 0.9rem;
+        width: 100%;
+        max-width: 200px;
+        margin: 0 auto;
+        display: block;
     }
 
     .resources-section {
-        padding: 2.5rem 1rem;
+        padding: 2rem 0.75rem;
     }
 
     .resources-title {
-        font-size: clamp(1.5rem, 3.5vw, 1.8rem);
-        margin-bottom: 2rem;
+        font-size: clamp(1.3rem, 3vw, 1.6rem);
+        margin-bottom: 1.5rem;
+        text-align: center;
     }
 
     .home-link {
         font-size: 0.8rem;
-        padding: 0.4rem 0.8rem;
+        padding: 0.5rem 1rem;
     }
 
     .theme-toggle {
-        width: 45px;
-        height: 45px;
-        font-size: 1.1rem;
+        width: 42px;
+        height: 42px;
+        font-size: 1rem;
+    }
+
+    .logo-section {
+        text-align: center;
+        width: 100%;
+    }
+
+    .header-actions {
+        flex-shrink: 0;
     }
 }
 
